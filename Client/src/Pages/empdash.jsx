@@ -1,7 +1,11 @@
+import { useAuth } from "../authcontext/authcontext.jsx"
 
 
 
-const Empdashboard =()=> {
+const Empdashboard = () => {
+  const { logout } = useAuth();
+
+
   return (
     <div className="d-flex">
       {/* Sidebar */}
@@ -20,8 +24,13 @@ const Empdashboard =()=> {
         {/* Navbar */}
         <nav className="navbar navbar-expand-lg navbar-light px-4" style={{ backgroundColor: '#00aaff' }}>
           <span className="navbar-brand text-white">Dashboard</span>
-          <div className="ms-auto">
-            <span className="text-white">Welcome, John Doe</span>
+          <div className="ms-auto row">
+            <div className="col-lg-6 ">
+              <button className=" btn bg-danger text-white" onClick={logout} >logout</button>
+
+            </div>
+            <div className="col-lg-6"> <span className="text-white">Welcome, John Doe</span></div>
+
           </div>
         </nav>
 

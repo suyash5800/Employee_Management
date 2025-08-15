@@ -1,7 +1,7 @@
 import User from "../user_modules/user.js";
 
 
-const getEmp = async (req, res) => {
+const GetEmp = async (req, res) => {
     try {
        const employees = await User.find();
        res.status(200).json(employees);
@@ -14,4 +14,4 @@ const getEmp = async (req, res) => {
 
 }
 
-export {getEmp};
+export default GetEmp;

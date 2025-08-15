@@ -1,20 +1,33 @@
 import axios from "axios";
 import { createContext, useContext, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom"; 
 
 const UserContext = createContext();
 
 const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
+    const [departmentCount, setDepartmentCount] = useState(0);
     const navigate = useNavigate();
+    const location = useLocation();
+
+    const fetchdeparmentscount = async () => {
+        try {
+            const res = await axios.get("http://localhost:5800/api/auth/department");
+            setDepartmentCount(res.data.length);
+        } catch (error) {
+            console.log("failed to fetch department count");
+        }
+    };
 
     useEffect(() => {
+        fetchdeparmentscount();
+
         const verifyUser = async () => {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem("token");
 
             try {
                 if (token) {
-                    const response = await axios.get('http://localhost:5173/api/auth/verify', {
+                    const response = await axios.get("http://localhost:5173/api/auth/verify", {
                         headers: {
                             Authorization: `Bearer ${token}`,
                         },
@@ -24,12 +37,25 @@ const AuthProvider = ({ children }) => {
                         setUser(response.data.user);
                     }
                 } else {
-                    navigate("/");
+                 
+                    if (
+                        location.pathname !== "/login" &&
+                        location.pathname !== "/newuser"
+                    )
+                     {
+                        navigate("/");
+                    }
                 }
             } catch (error) {
                 if (error.response) {
                     console.error("Verification failed:", error.response.data);
-                    navigate("/");
+                    // ✅ FIXED: Same conditional check to prevent forced redirect
+                    if (
+                        location.pathname !== "/login" &&
+                        location.pathname !== "/newuser"
+                    ) {
+                        navigate("/");
+                    }
                 } else {
                     console.error("Network error or server down:", error);
                 }
@@ -37,7 +63,7 @@ const AuthProvider = ({ children }) => {
         };
 
         verifyUser();
-    }, [navigate]);
+    }, [navigate, location.pathname]); 
 
     const login = (userData) => {
         setUser(userData);
@@ -50,7 +76,7 @@ const AuthProvider = ({ children }) => {
     };
 
     return (
-        <UserContext.Provider value={{ user, login, logout }}>
+        <UserContext.Provider value={{ user, login, logout, departmentCount, setDepartmentCount }}>
             {children}
         </UserContext.Provider>
     );

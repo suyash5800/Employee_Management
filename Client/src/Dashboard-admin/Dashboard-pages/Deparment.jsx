@@ -1,10 +1,219 @@
-const Departments = () =>{
+import "./Dashboard_pages_css/Department.css";
+import { useState, useEffect } from "react";
+import axios from "axios";
 
-    return ( <h1>
+const Departments = () => {
+  const [showModal, setShowModal] = useState(false);
+  const [showEditModel, setshowEditModel] = useState(false);
+  const [formData, setFormData] = useState([]);
+  const [departments, setDepartments] = useState("");
+  const [editData, seteditData] = useState(null);
 
-        hello from department page 
-    </h1>
-    )
-}
+  const fetchdeparments = async () => {
+    try {
+      const res = await axios.get("http://localhost:5800/api/auth/department");
+      setFormData(res.data);
+      console.log("fetch successfully");
+    } catch (error) {
+      console.error("Failed to fetch departments", error.message);
+    }
+  };
 
-export default Departments ;
+  useEffect(() => {
+    fetchdeparments();
+  }, []);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      await axios.post("http://localhost:5800/api/auth/department", { name: departments });
+      setDepartments("");
+      fetchdeparments();
+      setShowModal(false);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleEditData = async (e) => {
+    e.preventDefault();
+    if (!editData) return;
+    try {
+      await axios.put(`http://localhost:5800/api/auth/department/${editData._id}`, { name: departments });
+      setshowEditModel(false);
+      setDepartments("");
+      seteditData(null);
+      fetchdeparments();
+    } catch (error) {
+      console.log("error in handle edit", error);
+    }
+  };
+
+  const handleDelete = async (_id) => {
+    try {
+      await axios.delete(`http://localhost:5800/api/auth/department/${_id}`);
+      fetchdeparments();
+    } catch (error) {
+      console.log("Error deleting department", error);
+    }
+  };
+
+  return (
+    <div className="container-fluid">
+      <h3>Department Overview</h3>
+      <div className="row table-container">
+        <div className="col-lg-12">
+          <div className="table-responsive-wrapper">
+            <table className="styled-table" cellSpacing="0" cellPadding="10">
+              <thead>
+                <tr>
+                  <th>Id</th>
+                  <th>Departments</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {formData.map((d, index) => (
+                  <tr key={d._id}>
+                    <td>{index + 1}</td>
+                    <td>{d.name}</td>
+                    <td>
+                      <div className="w-100 gap-3 d-flex">
+                        <button
+                          className="btn btn-outline-primary"
+                          onClick={() => {
+                            setshowEditModel(true);
+                            seteditData(d);
+                            setDepartments(d.name);
+                          }}
+                        >
+                          Edit
+                        </button>
+                        <button
+                          className="btn btn-outline-danger"
+                          onClick={() => handleDelete(d._id)}
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+
+                <tr>
+                  <td className="fs-4 text-center" colSpan={2}>
+                    Total Departments: <b>{formData.length}</b>
+                  </td>
+                  <td>
+                    <button
+                      type="button"
+                      className="btn btn-primary w-100"
+                      value={""}
+                      onClick={() => setShowModal(true)}
+                    >
+                      Add New Record
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      {/* Modal for Add New Department */}
+      {showModal && (
+        <div className="custom-modal">
+          <div className="custom-modal-content">
+            <h4>Add New Department</h4>
+            <form
+              className="form-controls bg-light rounded shadow-sm w-50 mx-auto mt-4"
+              onSubmit={handleSubmit}
+              noValidate
+            >
+              <div className="mb-3">
+                <label htmlFor="departmentName" className="form-label fw-bold">
+                  Department Name
+                </label>
+                <input
+                  type="text"
+                  id="departmentName"
+                  name="name"
+                  className="form-control"
+                  placeholder="e.g., SalesDepartment"
+                  onKeyDown={(e) => {
+                    if (e.key === " ") {
+                      e.preventDefault();
+                      alert("No spaces allowed. Use camelCase if needed.");
+                    }
+                  }}
+                  onChange={(e) => setDepartments(e.target.value)}
+                  value={departments}
+                  required
+                />
+                <div className="form-text text-muted">
+                  * No spaces allowed. Use camelCase (e.g., HumanResources).
+                </div>
+              </div>
+
+              <div className="d-flex justify-content-between">
+                <button
+                  type="button"
+                  className="btn btn-outline-danger"
+                  onClick={() => {
+                    
+                    setShowModal(false)}}
+                >
+                  Cancel
+                </button>
+
+                <button type="submit" className="btn btn-success" disabled={!departments.trim()}>
+                  Submit
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Modal for Edit Department */}
+      {showEditModel && (
+        <div className="custom-modal">
+          <div className="custom-modal-content">
+            <h4>Edit Department</h4>
+            <form className="form-controls w-50 mx-auto mt-4" onSubmit={handleEditData} noValidate>
+              <label htmlFor="editDepartmentName" className="form-label">
+                Edit name:
+              </label>
+              <input
+                id="editDepartmentName"
+                className="form-control"
+                value={departments}
+                onChange={(e) => setDepartments(e.target.value)}
+                type="text"
+                name="name"
+                required
+              />
+              <div className="m-4 d-flex ms-2 gap-2">
+                <button
+                  type="button"
+                  className="btn btn-outline-danger"
+                  onClick={() =>{setshowEditModel(false)
+                    setDepartments("");
+                  } }
+                >
+                  Cancel
+                </button>
+                <button type="submit" className="btn bg-success text-white" disabled={!departments.trim()}>
+                  Update record
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default Departments;

@@ -1,12 +1,22 @@
 import express from "express";
-import { login,signup , verify} from "../controller/authController.js";
+import { login, signup, verify } from "../controller/authController.js";
+import{ departreg, getDepartments, updateDepartment,deleteDepartment} from "../controller/departmentController.js";
 import authmiddleware from '../middleware/authmiddleware.js'
+import upload from "../middleware/upload.js";
 
 
 
 const router = express.Router();
 router.post("/login", login);
-router.post("/signup", signup);
-router.post("/verify", authmiddleware,verify);
+router.post("/signup",upload.single('profileimage'), signup);
+router.post("/verify", authmiddleware, verify);
 
-export default  router ;
+
+
+router.post("/department", departreg);
+router.get("/department", getDepartments);
+router.put("/department/:id", updateDepartment);
+router.delete("/department/:id", deleteDepartment);
+
+
+export default router;

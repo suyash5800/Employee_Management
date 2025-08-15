@@ -96,6 +96,7 @@ const Login = () => {
                             placeholder="Enter your password"
                             className="form-control"
                             required
+                            autoComplete="off" 
                         />
                     </div>
 

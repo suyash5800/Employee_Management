@@ -2,6 +2,7 @@ import User from "../user_modules/user.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
+
 const login = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -36,32 +37,42 @@ const login = async (req, res) => {
 };
 
 
+
 const signup = async (req, res) => {
   try {
     const { name, email, password } = req.body;
 
-    // Check if user already exists
+    
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res.status(409).json({ success: false, error: "Email already registered" });
     }
 
-    // Hash password
+    
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Create and save new user
+    // Get profile image path (if uploaded)
+    // this only line is very import for getting photo from frontend
+    const profileimage = req.file?.path || null;
+
+   
     const newUser = new User({
       name,
       email,
       password: hashedPassword,
-      role: "employee"
+      role: "employee",
+      profileimage,
     });
 
     await newUser.save();
 
-    // Generate token
     const JWT_KEY = "jwtSkey5800580058008697";
-    const token = jwt.sign({ _id: newUser._id, role: newUser.role }, JWT_KEY, { expiresIn: "1d" });
+    // Generate token
+    const token = jwt.sign(
+      { _id: newUser._id, role: newUser.role },
+      JWT_KEY,
+      { expiresIn: "1d" }
+    );
 
     return res.status(201).json({
       success: true,
@@ -70,22 +81,22 @@ const signup = async (req, res) => {
         _id: newUser._id,
         email: newUser.email,
         role: newUser.role,
-        name: newUser.name
-      }
+        name: newUser.name,
+        profileimage: newUser.profileimage,
+      },
     });
   } catch (error) {
     console.error("Signup error:", error.message);
     return res.status(500).json({ success: false, error: "Server error" });
   }
-
-
-
-
 };
 
-const verify= (req, res) => {
+const verify = (req, res) => {
   return res.status(200).json({ success: false, user: req.user })
 
 }
 
-export { login, signup , verify };
+
+
+
+export { login, signup, verify };

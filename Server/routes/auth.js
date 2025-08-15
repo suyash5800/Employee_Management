@@ -1,7 +1,10 @@
 import express from "express";
-// import { login, signup, verify } from "../controller/authController.js";
+
+
 import { login ,signup,verify } from "../controller/authController.js";
-import { getEmp } from "../controller/employeecontroller.js";
+import GetEmp from "../controller/employeecontroller.js";
+
+
 import{ departreg, getDepartments, updateDepartment,deleteDepartment} from "../controller/departmentController.js";
 import authmiddleware from '../middleware/authmiddleware.js'
 import upload from "../middleware/upload.js";
@@ -20,7 +23,9 @@ router.get("/department", getDepartments);
 router.put("/department/:id", updateDepartment);
 router.delete("/department/:id", deleteDepartment);
 
-router.get("/empployee",getEmp)
+
+router.get("/empployee",GetEmp)
+
 
 
 export default router;

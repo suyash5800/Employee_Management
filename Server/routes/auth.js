@@ -1,8 +1,9 @@
 import express from "express";
 
 
+
 import { login ,signup,verify } from "../controller/authController.js";
-import GetEmp from "../controller/employeecontroller.js";
+import {GetEmp ,getupdateemployee} from "../controller/employeecontroller.js";
 
 
 import{ departreg, getDepartments, updateDepartment,deleteDepartment} from "../controller/departmentController.js";
@@ -24,7 +25,8 @@ router.put("/department/:id", updateDepartment);
 router.delete("/department/:id", deleteDepartment);
 
 
-router.get("/empployee",GetEmp)
+router.get("/employee",GetEmp);
+router.put("/employee",getupdateemployee);
 
 
 

@@ -9,6 +9,7 @@ const Signup = () => {
     const [confirmPassword, setConfirmPassword] = useState("");
     const [profilePic, setProfilePic] = useState(null); 
     const [errorMsg, setErrorMsg] = useState('');
+    const [departmentname ,setdepartmentname]= useState('');
 
     const navigate = useNavigate();
 
@@ -27,6 +28,7 @@ const Signup = () => {
             formData.append("name", name);
             formData.append("email", email);
             formData.append("password", password);
+            formData.append("department", departmentname);
             if (profilePic) {
                 formData.append("profileimage", profilePic);
             }
@@ -74,6 +76,18 @@ const Signup = () => {
                             onChange={(e) => setEmail(e.target.value)}
                             required
                         />
+                    </div>
+                    <div>
+                        <label htmlFor="deparment">Enter the Deparment</label>
+                        <input type="department" 
+                        className="form-control"
+                        value={departmentname}
+                        onChange={(e)=> setdepartmentname(e.target.value)}
+                        onKeyDown={(e)=>{if(e.key ===" "){
+                            e.preventDefault();
+                            alert("No space allowed , Enter in camalCase")
+                        }}}
+                        required/>
                     </div>
 
                     <div className="form-group mb-3">

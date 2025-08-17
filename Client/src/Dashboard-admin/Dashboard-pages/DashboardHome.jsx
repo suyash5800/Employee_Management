@@ -1,7 +1,9 @@
-import { useAuth } from "../../authcontext/authcontext";
+import { useAuth  } from "../../authcontext/authcontext";
+import { useEmployee } from "../../authcontext/employeefetchcontext";
 
 const DashboardHome = () => {
 const {departmentCount} = useAuth();
+const {employeeCount} = useEmployee();
 
     return (
         <div className="container-fluid   ">
@@ -17,7 +19,7 @@ const {departmentCount} = useAuth();
                             </div>
                             <div>
                                 <h6 className="mb-1">Total Employees </h6>
-                                <h5>120</h5>
+                                <h5>{employeeCount}</h5>
                             </div>
                         </div>
                     </div>

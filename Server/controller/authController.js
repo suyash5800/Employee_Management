@@ -40,7 +40,7 @@ const login = async (req, res) => {
 
 const signup = async (req, res) => {
   try {
-    const { name, email, password } = req.body;
+    const { name, email, password ,department } = req.body;
 
     
     const existingUser = await User.findOne({ email });
@@ -59,6 +59,7 @@ const signup = async (req, res) => {
     const newUser = new User({
       name,
       email,
+      department,
       password: hashedPassword,
       role: "employee",
       profileimage,
@@ -82,6 +83,7 @@ const signup = async (req, res) => {
         email: newUser.email,
         role: newUser.role,
         name: newUser.name,
+        department:newUser.department,
         profileimage: newUser.profileimage,
       },
     });

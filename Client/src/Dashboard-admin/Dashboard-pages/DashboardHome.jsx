@@ -30,7 +30,7 @@ const {employeeCount} = useEmployee();
                     <div className="card shadow-sm p-3">
                         <div className="d-flex align-items-center">
                             <div className="me-3  text-success fs-1">
-                                <i class="bi bi-building-fill-gear"></i>
+                                <i className="bi bi-building-fill-gear"></i>
                             </div>
                             <div>
                                 <h6 className="mb-1">Total Departments </h6>
@@ -64,7 +64,7 @@ const {employeeCount} = useEmployee();
                     <div className="card shadow-sm p-3">
                         <div className="d-flex align-items-center">
                             <div className="icon-div me-3 fs-1 text-warning">
-                                <i class="bi bi-archive-fill"></i>
+                                <i className="bi bi-archive-fill"></i>
                             </div>
                             <div className="card-text">
                                 <h6 className="mb-1">Leaves Applied </h6>
@@ -80,7 +80,7 @@ const {employeeCount} = useEmployee();
                     <div className="card shadow-sm p-3">
                         <div className="d-flex align-items-center">
                             <div className="icon-div me-3 text-primary fs-1">
-                                <i class="bi bi-send-check-fill"></i>
+                                <i className="bi bi-send-check-fill"></i>
                             </div>
                             <div className="card-text">
                                 <h6 className="mb-1">Leaves Approved </h6>
@@ -95,7 +95,7 @@ const {employeeCount} = useEmployee();
                     <div className="card  shadow-sm p-3">
                         <div className="d-flex align-items-center">
                             <div className="icon-div me-3 fs-1 text-primary  ">
-                                <i class="bi bi-hourglass-split"></i>
+                                <i className="bi bi-hourglass-split"></i>
                             </div>
                             <div className="card-text">
                                 <h6 className="mb-1">leaves pending </h6>
@@ -110,7 +110,7 @@ const {employeeCount} = useEmployee();
                     <div className="card   shadow-sm p-3 ">
                         <div className="d-flex align-item-center">
                             <div className="icon-div me-3 fs-1 text-white bg-danger p-1 ">
-                                <i class="bi bi-x-square-fill"></i>
+                                <i className="bi bi-x-square-fill"></i>
                             </div>
                             <div className="card-text">
                                 <h6 className="mb-1">leaves pending </h6>

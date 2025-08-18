@@ -36,6 +36,13 @@ const EmpInfoEdit = ({ setshowEditModel, employee }) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
+        // Get token from localStorage (adjust if you're storing it elsewhere)
+        const token = localStorage.getItem("token");
+        if (!token) {
+            alert("Session expired. Please log in again.");
+            return;
+        }
+
         if (formData.password !== formData.confirmpassword) {
             alert("Passwords do not match.");
             return;
@@ -46,17 +53,22 @@ const EmpInfoEdit = ({ setshowEditModel, employee }) => {
             updateData.append("name", formData.name);
             updateData.append("email", formData.email);
             updateData.append("department", formData.department);
-            updateData.append("password", formData.password);
+
+            if (formData.password.trim() !== "") {
+                updateData.append("password", formData.password);
+            }
+
             if (formData.profileimage) {
                 updateData.append("profileimage", formData.profileimage);
             }
 
             await axios.put(
-                `http://localhost:5800/api/auth/getupdateemployee/${employee._id}`,
+                `http://localhost:5800/api/auth/updateemployee/${employee._id}`,
                 updateData,
                 {
                     headers: {
                         "Content-Type": "multipart/form-data",
+                        Authorization: `Bearer ${token}`,
                     },
                 }
             );
@@ -65,7 +77,7 @@ const EmpInfoEdit = ({ setshowEditModel, employee }) => {
             setshowEditModel(false);
         } catch (error) {
             console.error("Error updating employee", error);
-            alert("Something went wrong while updating.");
+          console.error("Error updating employee:", error.response?.data || error.message);
         }
     };
 

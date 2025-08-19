@@ -4,22 +4,30 @@ import { useEmployee } from "../../authcontext/employeefetchcontext";
 import { useState } from "react";
 import EmpCardInfo from "./Dashboard-Models/Employee-model/empCardInfo";
 import EmpInfoEdit from "./Dashboard-Models/Employee-model/emInfoEdit";
+import EmpAddCard from "./Dashboard-Models/Employee-model/empaddcard";
 
 const EmpManagement = () => {
     const { tableData, employeeCount } = useEmployee();
 
     const [showCardModel, setshowCardModel] = useState(false);
     const [showEditModel, setshowEditModel] = useState(false);
+   
     const [selectEmployeee, setselectEmployee] = useState(null);
 
     return (
         <div className="container-fluid">
             <div className="container">
-                <div className="row">
-                    <h3><b>Maintain Employees Records</b></h3>
+                <div className="row ">
+                    <div className="col-6 lg-6 md-6">  <h3><b>Maintain Employees Records</b></h3></div>
+                    <div className="col-6 lg-6 md-6 text-end">
+                        <button type="button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addEmployeeModal">
+                            Add New Employee
+                        </button>
+                    </div>
+
                 </div>
 
-                <div className="row table-container">
+                <div className="row table-container table-responsive">
                     <table className="styled-table" cellSpacing="0">
                         <thead>
                             <tr>
@@ -79,14 +87,11 @@ const EmpManagement = () => {
                                     </td>
                                 </tr>
                             ))}
-                            <tr>
-                                <td colSpan={3}>
-                                    <h4>Total Employee: {employeeCount}</h4>
-                                </td>
-                            </tr>
+                           
                         </tbody>
                     </table>
                 </div>
+                <h4>Total Employee: {employeeCount}</h4>
             </div>
 
             {showCardModel && (
@@ -106,6 +111,9 @@ const EmpManagement = () => {
                     />
                 </div>
             )}
+           
+            <EmpAddCard/>
+
         </div>
     );
 };

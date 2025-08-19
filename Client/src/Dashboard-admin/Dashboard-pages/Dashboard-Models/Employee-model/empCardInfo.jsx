@@ -18,7 +18,8 @@ const EmpCardInfo = ({ setshowCardModel,employee }) => {
     <div style={{ marginBottom: "15px" }}>
         {employee.profileimage ? (
             <img
-                src={`http://localhost:5800/getupdateemployee${employee.profileimage.replace(/\\/g, "/")}`}
+                src={`http://localhost:5800/${employee.profileimage.replace(/\\/g, "/")}`}
+               
                 alt={`${employee.name}'s profile`}
                 width="100"
                 height="100"

@@ -11,23 +11,46 @@ const EmpManagement = () => {
 
     const [showCardModel, setshowCardModel] = useState(false);
     const [showEditModel, setshowEditModel] = useState(false);
-   
     const [selectEmployeee, setselectEmployee] = useState(null);
+    const [searchTerm, setSearchTerm] = useState('');
+
+    const filteredData = tableData.filter((employee) => {
+        const search = searchTerm.toLowerCase();
+        return (
+            employee.name.toLowerCase().includes(search) ||
+            employee.email.toLowerCase().includes(search) ||
+            (employee.department && employee.department.toLowerCase().includes(search))
+        );
+    });
 
     return (
         <div className="container-fluid">
             <div className="container">
-                <div className="row ">
-                    <div className="col-6 lg-6 md-6">  <h3><b>Maintain Employees Records</b></h3></div>
-                    <div className="col-6 lg-6 md-6 text-end">
+                <div className="row">
+                    <div className="col-6">
+                        <h3><b>Maintain Employees Records</b></h3>
+                    </div>
+                    <div className="col-6 text-end">
                         <button type="button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addEmployeeModal">
                             Add New Employee
                         </button>
                     </div>
-
                 </div>
 
-                <div className="row table-container table-responsive">
+        
+                <div className="row my-3">
+                    <div className="col-md-6">
+                        <input
+                            type="text"
+                            className="form-control"
+                            placeholder="Search by name, email or department"
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                        />
+                    </div>
+                </div>
+
+                <div className="row table-container table-responsive" style={{ maxHeight: '500px', overflowY: 'auto' }}>
                     <table className="styled-table" cellSpacing="0">
                         <thead>
                             <tr>
@@ -40,7 +63,7 @@ const EmpManagement = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {tableData.map((d, index) => (
+                            {filteredData.map((d, index) => (
                                 <tr key={d._id}>
                                     <td>{index + 1}</td>
                                     <td>{d.name}</td>
@@ -61,61 +84,37 @@ const EmpManagement = () => {
                                     </td>
                                     <td>
                                         <div className="gap-3 d-flex">
-                                            <button
-                                                className="btn btn-success"
-                                                onClick={() => {
-                                                    setselectEmployee(d);
-                                                    setshowCardModel(true);
-                                                }}
-                                            >
-                                                View
-                                            </button>
-
-                                            <button
-                                                className="btn btn-warning"
-                                                onClick={() => {
-                                                    setselectEmployee(d);
-                                                    setshowEditModel(true);
-                                                }}
-                                            >
-                                                Edit
-                                            </button>
-
+                                            <button className="btn btn-success" onClick={() => { setselectEmployee(d); setshowCardModel(true); }}>View</button>
+                                            <button className="btn btn-warning" onClick={() => { setselectEmployee(d); setshowEditModel(true); }}>Edit</button>
                                             <button className="btn btn-danger">Delete</button>
                                             <button className="btn btn-primary">Leave</button>
                                         </div>
                                     </td>
                                 </tr>
                             ))}
-                           
                         </tbody>
                     </table>
                 </div>
+
                 <h4>Total Employee: {employeeCount}</h4>
             </div>
 
             {showCardModel && (
                 <div className="custom-modal">
-                    <EmpCardInfo
-                        employee={selectEmployeee}
-                        setshowCardModel={setshowCardModel}
-                    />
+                    <EmpCardInfo employee={selectEmployeee} setshowCardModel={setshowCardModel} />
                 </div>
             )}
 
             {showEditModel && (
                 <div className="custom-modal">
-                    <EmpInfoEdit
-                        employee={selectEmployeee}
-                        setshowEditModel={setshowEditModel}
-                    />
+                    <EmpInfoEdit employee={selectEmployeee} setshowEditModel={setshowEditModel} />
                 </div>
             )}
-           
-            <EmpAddCard/>
 
+            <EmpAddCard />
         </div>
     );
 };
+
 
 export default EmpManagement;

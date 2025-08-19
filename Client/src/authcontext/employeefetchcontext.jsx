@@ -25,7 +25,7 @@ const EmployeeProvider = ({ children }) => {
     }
      useEffect(() => { fetchemployee(); }, [location])
     return (
-        <EmployeeContext.Provider value={{ tableData, employeeCount }}>
+        <EmployeeContext.Provider value={{ tableData, employeeCount ,fetchemployee}}>
             {children}
         </EmployeeContext.Provider >
 

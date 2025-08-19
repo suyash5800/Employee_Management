@@ -60,7 +60,19 @@ const Departments = () => {
 
   return (
     <div className="container-fluid">
-      <h3>Department Overview</h3>
+      <div className="row">
+        <div className="col-md-6"><h3>Department Overview</h3></div>
+        <div className="col-md-6 text-end"> 
+           <button
+          type="button"
+          className="btn btn-primary w-50"
+          value={""}
+          onClick={() => setShowModal(true)}
+        >
+          Add New Record
+        </button></div>
+      </div>
+      
       <div className="row table-container">
         <div className="col-lg-12">
           <div className="table-responsive-wrapper">
@@ -104,16 +116,7 @@ const Departments = () => {
                   <td className="fs-4 text-center" colSpan={2}>
                     Total Departments: <b>{formData.length}</b>
                   </td>
-                  <td>
-                    <button
-                      type="button"
-                      className="btn btn-primary w-100"
-                      value={""}
-                      onClick={() => setShowModal(true)}
-                    >
-                      Add New Record
-                    </button>
-                  </td>
+
                 </tr>
               </tbody>
             </table>
@@ -161,8 +164,9 @@ const Departments = () => {
                   type="button"
                   className="btn btn-outline-danger"
                   onClick={() => {
-                    
-                    setShowModal(false)}}
+
+                    setShowModal(false)
+                  }}
                 >
                   Cancel
                 </button>
@@ -198,9 +202,10 @@ const Departments = () => {
                 <button
                   type="button"
                   className="btn btn-outline-danger"
-                  onClick={() =>{setshowEditModel(false)
+                  onClick={() => {
+                    setshowEditModel(false)
                     setDepartments("");
-                  } }
+                  }}
                 >
                   Cancel
                 </button>

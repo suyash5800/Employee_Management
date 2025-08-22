@@ -33,15 +33,18 @@ const updateDepartment = async (req, res) => {
     const { name } = req.body;
     const { id } = req.params;
 
+   
+
     const updatedDepartment = await departmentRegistor.findByIdAndUpdate(id, { name }, { new: true });
 
     if(!updatedDepartment) {
       return res.status(404).json({ success: false, message: "Department not found" });
     }
+    console.log( "Updated Department:", name);
+     return res.status(200).json({ success: true, message: "Department updated", department: updatedDepartment });
     
-    res.status(200).json({ success: true, message: "Department updated", department: updatedDepartment });
   } catch(error) {
-    res.status(500).json({ success: false, message: "Error updating department", error: error.message });
+     return res.status(500).json({ success: false, message: "Error updating department", error: error.message });
 
   }
 

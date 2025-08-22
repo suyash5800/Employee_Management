@@ -8,16 +8,14 @@ const EmpAddCard = () => {
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [department, setDepartment] = useState("");
+    const [errormsg, setErrorMsg] = useState("");
     const [profileimage, setprofileimage] = useState(null);
     const { fetchemployee } = useEmployee();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setErrorMsg("")
 
-        if (!name || !email || !password || !department) {
-            alert("Please fill in all required fields.");
-            return;
-        }
 
         if (password !== confirmPassword) {
             alert("Password and Confirm Password do not match.");
@@ -62,9 +60,20 @@ const EmpAddCard = () => {
 
         } catch (error) {
             console.error("Error during adding new member:", error);
-            alert("Something went wrong. Please try again.");
+
+            setErrorMsg(error.response?.data?.error || "adding falied Employee")
         }
     };
+
+    const handlecancle = () => {
+        setName("");
+        setEmail("");
+        setPassword("");
+        setConfirmPassword("");
+        setDepartment("");
+        setErrorMsg("");
+        setprofileimage("");
+    }
 
     return (
         <div
@@ -102,6 +111,7 @@ const EmpAddCard = () => {
                                         value={name}
                                         onChange={(e) => setName(e.target.value)}
                                         placeholder="Enter name"
+                                        required
                                     />
                                 </div>
 
@@ -114,6 +124,7 @@ const EmpAddCard = () => {
                                         value={email}
                                         onChange={(e) => setEmail(e.target.value)}
                                         placeholder="Enter email"
+                                        required
                                     />
                                 </div>
 
@@ -126,6 +137,7 @@ const EmpAddCard = () => {
                                         value={password}
                                         onChange={(e) => setPassword(e.target.value)}
                                         placeholder="Enter password"
+                                        required
                                     />
                                 </div>
 
@@ -138,6 +150,7 @@ const EmpAddCard = () => {
                                         value={confirmPassword}
                                         onChange={(e) => setConfirmPassword(e.target.value)}
                                         placeholder="Enter confirm password"
+                                        required
                                     />
                                 </div>
 
@@ -148,6 +161,7 @@ const EmpAddCard = () => {
                                         className="form-select"
                                         value={department}
                                         onChange={(e) => setDepartment(e.target.value)}
+                                        required
                                     >
                                         <option value="">Select department</option>
                                         <option>HR</option>
@@ -181,6 +195,7 @@ const EmpAddCard = () => {
                                     type="button"
                                     className="btn btn-secondary"
                                     data-bs-dismiss="modal"
+                                    onClick={ handlecancle}
                                 >
                                     Cancel
                                 </button>
@@ -189,6 +204,7 @@ const EmpAddCard = () => {
                                 </button>
                             </div>
                         </form>
+                        {errormsg && <p className="text-danger fs-4"> {errormsg}</p>}
                     </div>
                 </div>
             </div>

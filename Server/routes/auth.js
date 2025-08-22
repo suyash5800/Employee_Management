@@ -23,7 +23,7 @@ router.delete("/department/:id", deleteDepartment);
 
 
 router.get("/employee",GetEmp);
-router.put("/updateemployee/:id",verify,upload.single('profileimage'), updateemployee);
+router.put("/updateemployee/:id",authmiddleware,upload.single('profileimage'), updateemployee);
 
 
 

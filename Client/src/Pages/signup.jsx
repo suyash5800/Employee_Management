@@ -1,15 +1,17 @@
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../authcontext/authcontext";
 
 const Signup = () => {
     const [name, setName] = useState('');
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
-    const [profilePic, setProfilePic] = useState(null); 
+    const [profilePic, setProfilePic] = useState(null);
     const [errorMsg, setErrorMsg] = useState('');
-    const [departmentname ,setdepartmentname]= useState('');
+    const [departmentname, setdepartmentname] = useState('');
+    const { departmentNames } = useAuth();
 
     const navigate = useNavigate();
 
@@ -23,7 +25,7 @@ const Signup = () => {
         }
 
         try {
-          
+
             const formData = new FormData();
             formData.append("name", name);
             formData.append("email", email);
@@ -33,7 +35,7 @@ const Signup = () => {
                 formData.append("profileimage", profilePic);
             }
 
-         
+
             const response = await axios.post("http://localhost:5800/api/auth/signup", formData, {
                 headers: {
                     "Content-Type": "multipart/form-data",
@@ -55,7 +57,7 @@ const Signup = () => {
         <div className="container-fluid bg-primary min-vh-100 d-flex justify-content-center align-items-center">
             <div className="bg-white p-4 rounded shadow" style={{ maxWidth: "400px", width: "100%" }}>
                 <h2 className="text-center text-primary mb-4">Welcome to Signup</h2>
-                <form onSubmit={handleSubmit} encType="multipart/form-data"> 
+                <form onSubmit={handleSubmit} encType="multipart/form-data">
                     <div className="form-group mb-3 text-start">
                         <label htmlFor="name">Enter the name</label>
                         <input
@@ -79,15 +81,22 @@ const Signup = () => {
                     </div>
                     <div>
                         <label htmlFor="deparment">Enter the Deparment</label>
-                        <input type="department" 
-                        className="form-control"
-                        value={departmentname}
-                        onChange={(e)=> setdepartmentname(e.target.value)}
-                        onKeyDown={(e)=>{if(e.key ===" "){
-                            e.preventDefault();
-                            alert("No space allowed , Enter in camalCase")
-                        }}}
-                        required/>
+                        
+                        <select id="department"
+                            className="form-select" value={departmentname}
+                            onChange={(e) => setdepartmentname(e.target.value)}
+                            required
+
+                        >
+                            <option value=""  >Select Department   </option>
+                            {departmentNames.map((dept) => (
+                                <option key={dept._id} value={dept.name}>
+                                    {dept.name}
+                                </option>))}
+
+                        </select>
+
+
                     </div>
 
                     <div className="form-group mb-3">
@@ -114,7 +123,7 @@ const Signup = () => {
 
                     <div className="addpic my-3">
                         <label htmlFor="addpic">Add Profile Picture</label>
-                 
+
                         <input
                             type="file"
                             accept="image/*"

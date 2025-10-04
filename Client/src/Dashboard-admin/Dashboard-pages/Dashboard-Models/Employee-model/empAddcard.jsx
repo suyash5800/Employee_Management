@@ -1,5 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
+import { useAuth } from "../../../../authcontext/authcontext";
 import { useEmployee } from "../../../../authcontext/employeefetchcontext";
 
 const EmpAddCard = () => {
@@ -11,6 +12,7 @@ const EmpAddCard = () => {
     const [errormsg, setErrorMsg] = useState("");
     const [profileimage, setprofileimage] = useState(null);
     const { fetchemployee } = useEmployee();
+    const { departmentNames } = useAuth();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -164,14 +166,13 @@ const EmpAddCard = () => {
                                         required
                                     >
                                         <option value="">Select department</option>
-                                        <option>HR</option>
-                                        <option>Engineering</option>
-                                        <option>Sales</option>
-                                        <option>Marketing</option>
-                                        <option>WebDev</option>
-                                        <option>FrontEndDev</option>
-                                        <option>BackEndDev</option>
+                                        {departmentNames.map((dept) => (
+                                            <option key={dept._id} value={dept.name}>
+                                                {dept.name}
+                                            </option>
+                                        ))}
                                     </select>
+
                                 </div>
 
 
@@ -195,7 +196,7 @@ const EmpAddCard = () => {
                                     type="button"
                                     className="btn btn-secondary"
                                     data-bs-dismiss="modal"
-                                    onClick={ handlecancle}
+                                    onClick={handlecancle}
                                 >
                                     Cancel
                                 </button>

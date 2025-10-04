@@ -1,34 +1,24 @@
 import "./Dashboard_pages_css/Department.css";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { useAuth } from "../../authcontext/authcontext";
 
 const Departments = () => {
   const [showModal, setShowModal] = useState(false);
   const [showEditModel, setshowEditModel] = useState(false);
-  const [formData, setFormData] = useState([]);
+ 
   const [departments, setDepartments] = useState("");
   const [editData, seteditData] = useState(null);
+  const {departmentNames,fetchdeparmentscount}= useAuth();
 
-  const fetchdeparments = async () => {
-    try {
-      const res = await axios.get("http://localhost:5800/api/auth/department");
-      setFormData(res.data);
-      console.log("fetch successfully");
-    } catch (error) {
-      console.error("Failed to fetch departments", error.message);
-    }
-  };
 
-  useEffect(() => {
-    fetchdeparments();
-  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       await axios.post("http://localhost:5800/api/auth/department", { name: departments });
       setDepartments("");
-      fetchdeparments();
+      fetchdeparmentscount();
       setShowModal(false);
     } catch (error) {
       console.log(error);
@@ -43,7 +33,7 @@ const Departments = () => {
       setshowEditModel(false);
       setDepartments("");
       seteditData(null);
-      fetchdeparments();
+     fetchdeparmentscount();
     } catch (error) {
       console.log("error in handle edit", error);
     }
@@ -52,7 +42,7 @@ const Departments = () => {
   const handleDelete = async (_id) => {
     try {
       await axios.delete(`http://localhost:5800/api/auth/department/${_id}`);
-      fetchdeparments();
+      fetchdeparmentscount();
     } catch (error) {
       console.log("Error deleting department", error);
     }
@@ -85,7 +75,7 @@ const Departments = () => {
                 </tr>
               </thead>
               <tbody>
-                {formData.map((d, index) => (
+                {departmentNames.map((d, index) => (
                   <tr key={d._id}>
                     <td>{index + 1}</td>
                     <td>{d.name}</td>
@@ -114,7 +104,7 @@ const Departments = () => {
 
                 <tr>
                   <td className="fs-4 text-center" colSpan={2}>
-                    Total Departments: <b>{formData.length}</b>
+                    Total Departments: <b>{departmentNames.length}</b>
                   </td>
 
                 </tr>

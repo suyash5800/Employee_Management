@@ -7,6 +7,7 @@ const UserContext = createContext();
 const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [departmentCount, setDepartmentCount] = useState(0);
+    const [departmentNames,setdepartmentNames]= useState([]);
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -14,13 +15,21 @@ const AuthProvider = ({ children }) => {
         try {
             const res = await axios.get("http://localhost:5800/api/auth/department");
             setDepartmentCount(res.data.length);
+            setdepartmentNames(res.data);
+            console.log("fetching data is successfully from authcontext");
         } catch (error) {
             console.log("failed to fetch department count");
         }
     };
+    
+
+ useEffect(() => {
+    fetchdeparmentscount();
+}, [location]); 
+
 
     useEffect(() => {
-        fetchdeparmentscount();
+       
 
         const verifyUser = async () => {
             const token = localStorage.getItem("token");
@@ -49,7 +58,7 @@ const AuthProvider = ({ children }) => {
             } catch (error) {
                 if (error.response) {
                     console.error("Verification failed:", error.response.data);
-                    // ✅ FIXED: Same conditional check to prevent forced redirect
+                 
                     if (
                         location.pathname !== "/login" &&
                         location.pathname !== "/newuser"
@@ -76,7 +85,7 @@ const AuthProvider = ({ children }) => {
     };
 
     return (
-        <UserContext.Provider value={{ user, login, logout, departmentCount, setDepartmentCount }}>
+        <UserContext.Provider value={{ user, login, logout, departmentCount, setDepartmentCount , departmentNames , fetchdeparmentscount }}>
             {children}
         </UserContext.Provider>
     );

@@ -1,7 +1,11 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { useAuth } from "../../../../authcontext/authcontext";
+import { useEmployee } from "../../../../authcontext/employeefetchcontext";
 
 const EmpInfoEdit = ({ setshowEditModel, employee }) => {
+    const {fetchemployee}= useEmployee();
+
     const [formData, setFormData] = useState({
         name: "",
         email: "",
@@ -10,13 +14,14 @@ const EmpInfoEdit = ({ setshowEditModel, employee }) => {
         confirmpassword: "",
         profileimage: null
     });
+    const { departmentNames } = useAuth();
 
     useEffect(() => {
         if (employee) {
             setFormData({
                 name: employee.name || "",
                 email: employee.email || "",
-                department: employee.department || "",
+                department: employee.department,
                 password: "",
                 confirmpassword: "",
                 profileimage: null
@@ -35,6 +40,7 @@ const EmpInfoEdit = ({ setshowEditModel, employee }) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        fetchemployee();
 
         // Get token from localStorage (adjust if you're storing it elsewhere)
         const token = localStorage.getItem("token");
@@ -67,7 +73,7 @@ const EmpInfoEdit = ({ setshowEditModel, employee }) => {
                 updateData,
                 {
                     headers: {
-                        
+
                         Authorization: `Bearer ${token}`,
                     },
                 }
@@ -77,7 +83,7 @@ const EmpInfoEdit = ({ setshowEditModel, employee }) => {
             setshowEditModel(false);
         } catch (error) {
             console.error("Error updating employee", error);
-          console.error("Error updating employee:", error.response?.data || error.message);
+            console.error("Error updating employee:", error.response?.data || error.message);
         }
     };
 
@@ -98,7 +104,22 @@ const EmpInfoEdit = ({ setshowEditModel, employee }) => {
 
                 <div className="mb-3">
                     <label htmlFor="department" className="form-label">Department</label>
-                    <input type="text" className="form-control" value={formData.department} name="department" onChange={handleChange} />
+                    
+                    <select className="form-select" name="department" value={formData.department} onChange={handleChange} required>
+                        <option value="">Select department</option>
+                        {departmentNames.map((dept) => (
+                            <option key={dept._id} value={dept.name}>
+                                {dept.name}
+                            </option>
+                        ))}
+
+
+                    </select>
+
+
+
+
+                   
                 </div>
 
                 <div className="row mb-3">

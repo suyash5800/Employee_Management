@@ -7,7 +7,7 @@ import EmpInfoEdit from "./Dashboard-Models/Employee-model/emInfoEdit";
 import EmpAddCard from "./Dashboard-Models/Employee-model/empaddcard";
 
 const EmpManagement = () => {
-    const { tableData, employeeCount } = useEmployee();
+    const { tableData, employeeCount , deleteEmp } = useEmployee();
 
     const [showCardModel, setshowCardModel] = useState(false);
     const [showEditModel, setshowEditModel] = useState(false);
@@ -86,7 +86,7 @@ const EmpManagement = () => {
                                         <div className="gap-3 d-flex">
                                             <button className="btn btn-success" onClick={() => { setselectEmployee(d); setshowCardModel(true); }}>View</button>
                                             <button className="btn btn-warning" onClick={() => { setselectEmployee(d); setshowEditModel(true); }}>Edit</button>
-                                            <button className="btn btn-danger">Delete</button>
+                                            <button className="btn btn-danger" onClick={()=>{deleteEmp(d._id,d.name)}}>Delete</button>
                                             <button className="btn btn-primary">Leave</button>
                                         </div>
                                     </td>

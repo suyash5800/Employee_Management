@@ -21,6 +21,8 @@ const AuthProvider = ({ children }) => {
             console.log("failed to fetch department count");
         }
     };
+
+   
     
 
  useEffect(() => {

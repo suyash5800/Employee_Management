@@ -77,4 +77,24 @@ const updateemployee = async (req, res) => {
 };
 
 
-export { GetEmp, updateemployee }
+const deleteEmployee = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const deleted = await User.findByIdAndDelete(id);
+        if (!deleted) {
+            return res.status(404).json({ success: false, message: "Employee is not found " })
+        }
+        if (deleted.profileimage && fs.existsSync(deleted.profileimage)) {
+            fs.unlinkSync(deleted.profileimage);
+        }
+
+        res.status(200).json({ success: true, message: "Employee is deleted " });
+
+    } catch (error) {
+        res.status(500).json({ success: false, message: "Error deleting a employee ", error: error.message });
+
+    }
+}
+
+
+export { GetEmp, updateemployee, deleteEmployee }

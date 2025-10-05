@@ -48,6 +48,4 @@ Export to CSV/PDF
 Tests (unit & integration)
 
 👨‍💻 Author
-
-Your Name
 https://github.com/suyash5800

@@ -1,7 +1,7 @@
 import express from "express";
 import { login ,signup,verify } from "../controller/authController.js";
 import {GetEmp ,updateemployee ,deleteEmployee} from "../controller/employeecontroller.js";
-
+import { leaveRegistor ,leaveGets} from "../controller/leavesController.js";
 
 import{ departreg, getDepartments, updateDepartment,deleteDepartment} from "../controller/departmentController.js";
 import authmiddleware from '../middleware/authmiddleware.js'
@@ -25,6 +25,10 @@ router.delete("/department/:id", deleteDepartment);
 router.get("/employee",GetEmp);
 router.put("/updateemployee/:id",authmiddleware,upload.single('profileimage'), updateemployee);
 router.delete("/deletedEmp/:id",deleteEmployee);
+
+router.get("/leavesGets",leaveGets);
+router.post("/leaveRegistor",leaveRegistor);
+
 
 
 

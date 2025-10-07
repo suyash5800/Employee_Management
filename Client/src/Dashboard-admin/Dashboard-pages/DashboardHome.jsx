@@ -1,9 +1,15 @@
 import { useAuth  } from "../../authcontext/authcontext";
 import { useEmployee } from "../../authcontext/employeefetchcontext";
+import { useLeaves } from "../../authcontext/leavesContext";
 
 const DashboardHome = () => {
 const {departmentCount} = useAuth();
 const {employeeCount} = useEmployee();
+const {TotalLeaves , leavesData} = useLeaves();
+
+const PendingLeaves = Array.isArray(leavesData) ? leavesData.filter(leave=> leave.status ==="pending").length : 0;
+const ApprovedLeaves = Array.isArray(leavesData) ? leavesData.filter(leave=> leave.status ==="accepted").length : 0;
+const RejectedLeaves = Array.isArray(leavesData) ? leavesData.filter(leave => leave.status ==="rejected").length: 0;
 
     return (
         <div className="container-fluid   ">
@@ -68,7 +74,7 @@ const {employeeCount} = useEmployee();
                             </div>
                             <div className="card-text">
                                 <h6 className="mb-1">Leaves Applied </h6>
-                                <h5>120</h5>
+                                <h5>{TotalLeaves}</h5>
                             </div>
                         </div>
 
@@ -84,7 +90,7 @@ const {employeeCount} = useEmployee();
                             </div>
                             <div className="card-text">
                                 <h6 className="mb-1">Leaves Approved </h6>
-                                <h5>120</h5>
+                                <h5>{ApprovedLeaves}</h5>
 
                             </div>
                         </div>
@@ -99,7 +105,7 @@ const {employeeCount} = useEmployee();
                             </div>
                             <div className="card-text">
                                 <h6 className="mb-1">leaves pending </h6>
-                                <h5>12</h5>
+                                <h5>{PendingLeaves}</h5>
                             </div>
 
                         </div>
@@ -113,8 +119,8 @@ const {employeeCount} = useEmployee();
                                 <i className="bi bi-x-square-fill"></i>
                             </div>
                             <div className="card-text">
-                                <h6 className="mb-1">leaves pending </h6>
-                                <h5>12</h5>
+                                <h6 className="mb-1">leaves Rejected </h6>
+                                <h5>{RejectedLeaves}</h5>
                             </div>
 
 

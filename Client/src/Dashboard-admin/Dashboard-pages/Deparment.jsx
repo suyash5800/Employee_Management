@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { useAuth } from "../../authcontext/authcontext";
 
+
 const Departments = () => {
   const [showModal, setShowModal] = useState(false);
   const [showEditModel, setshowEditModel] = useState(false);

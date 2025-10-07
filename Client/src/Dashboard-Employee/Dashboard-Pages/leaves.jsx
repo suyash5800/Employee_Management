@@ -1,6 +1,8 @@
 import React, { useState } from "react";
+import{ useLeaves} from "../../authcontext/leavesContext.jsx";
 
 const ApplyLeave = () => {
+const { TotalLeaves } = useLeaves();
   const [formData, setFormData] = useState({
     emp_name: "",
     leave_type: "casual",
@@ -39,6 +41,7 @@ const ApplyLeave = () => {
 
   return (
     <div className="container mt-4">
+      <h1>Total Leaves = {TotalLeaves}</h1>
       <div className="card shadow p-4">
         <h3 className="text-primary mb-3">Apply for Leave</h3>
         <form onSubmit={handleSubmit}>
@@ -117,6 +120,7 @@ const ApplyLeave = () => {
           </button>
         </form>
       </div>
+
     </div>
   );
 };

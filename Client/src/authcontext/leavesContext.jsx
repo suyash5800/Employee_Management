@@ -1,31 +1,35 @@
-import axios from "axios";
+
 import { createContext, useContext, useEffect, useState } from "react";
+import axios from "axios";
+import { useLocation } from "react-router-dom";
 
-const UserContext = createContext();
+const LeavesContext = createContext();
 
-const leavesProvider = ({ children }) => {
+const LeavesProvider = ({ children } = {}) => {
+  const [leavesData, setLeavesData] = useState([]);
+  const [TotalLeaves, setTotalLeaves] = useState(0);
+  const location = useLocation();
 
-    const [leavesData, setleavesData] = useState([]);
-    const [TotalLeaves, setTotalLeaves] = useState(0);
-    const fetchLeaves = async () => {
-        try {
-            const res = await axios.get("http://localhost:5800/api/auth/leavesGets");
-            setTotalLeaves(res.data.length);
-            setleavesData(res.data);
-            console.log("Fetching a Leaves data is succesfull");
-        } catch (error) {
-            console.log("faild to get Leaves data", error);
-
-
-        }
+  const fetchLeaves = async () => {
+    try {
+      const res = await axios.get("http://localhost:5800/api/auth/leavesGets");
+      setLeavesData(res.data);
+      setTotalLeaves(res.data.length);
+    } catch (error) {
+      console.error("Failed to fetch leaves:", error);
     }
-    return (
-        <UserContext.Provider value={{ fetchLeaves,leavesProvider, leavesData, TotalLeaves }}>
-            {children}
-        </UserContext.Provider>
-    );
+  };
 
+  useEffect(() => {
+    fetchLeaves();
+  }, [location]);
+
+  return (
+    <LeavesContext.Provider value={{ fetchLeaves, leavesData, TotalLeaves }}>
+      {children}
+    </LeavesContext.Provider>
+  );
 };
 
-export const useleaves =()=>useContext(UserContext);
-export default leavesProvider;
+export const useLeaves = () => useContext(LeavesContext);
+export default LeavesProvider;

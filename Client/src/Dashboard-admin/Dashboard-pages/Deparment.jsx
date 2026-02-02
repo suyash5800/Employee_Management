@@ -1,5 +1,5 @@
 import "./Dashboard_pages_css/Department.css";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import axios from "axios";
 import { useAuth } from "../../authcontext/authcontext";
 

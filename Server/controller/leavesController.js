@@ -25,6 +25,36 @@ const leaveGets = async (req, res)=>{
 
 }
 
+//update the pending leave status
+const leaveUpdate = async (req,res)=>{
+
+    console.log("Leaves status button hit ");
+    try {
+        const id = req.params.id;
+        const{status}= req.body;
+
+        const leave = await Leave.findById(id);
+        if(!leave){
+             return res.status(404).json({message: "leaves not found"});
+        }
+        if (leave.status===status ){
+          return res.status(404).json({message: "leaves already approved"});
+        }
+
+        leave.status = status;
+
+        const approvedLeave =await leave.save();
+        console.log("Leaved approved ", approvedLeave);
+
+        
+    } catch (error) {
+        console.error("Update Error:", error);
+        res.status(500).json({ error: error.message });
+        
+    }
+
+}
 
 
-export {leaveRegistor,leaveGets};
+
+export {leaveRegistor,leaveGets,leaveUpdate};

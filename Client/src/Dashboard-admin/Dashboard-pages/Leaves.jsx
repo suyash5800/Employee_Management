@@ -1,9 +1,12 @@
 
 import "./Dashboard_pages_css/Department.css";
 import { useLeaves } from "../../authcontext/leavesContext.jsx";
+import { useState } from "react";
+import axios from "axios";
 
 const Leaves = () => {
   const { leavesData, TotalLeaves } = useLeaves();
+  
 
   const formatDate = (dateStr) => {
     const date = new Date(dateStr);
@@ -13,6 +16,21 @@ const Leaves = () => {
 
     return `${day}/${month}/${year}`;
   };
+
+  const handleEditleave = async ({ id, status }) => {
+
+    try {
+      const newstatus = "accepted";
+      await axios.put(`http://localhost:5800/api/auth/leaveUpdate/${id}`, { status: newstatus });
+
+      console.log("leave is aproved ");
+      alert("leave approved");
+    } catch (error) {
+      console.log("error in handle edit");
+      alert(error);
+
+    }
+  }
 
   return (
     <div style={{ padding: '20px' }}>
@@ -42,9 +60,13 @@ const Leaves = () => {
                   <td>{formatDate(leave.leave_to)}</td>
                   <td>{leave.status}</td>
                   <td>{totalDays} Days</td>
-                  <td><button className="btn-primary btn m-2">Approved</button>
+                  <td><button className="btn-primary btn m-2" value=""
+                    onClick={() => {
+                      handleEditleave({ id: leave._id, status: leave.status });
+
+                    }}>Approved</button>
                     <button className="btn btn-danger text white ">Reject</button>
-                    </td>
+                  </td>
                 </tr>
               );
             })
